@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import architectureAsset from "@/assets/nonna-architecture.svg.asset.json";
+import architectureLightAsset from "@/assets/nonna-architecture-light.svg.asset.json";
 import { Reveal, SectionHeading } from "@/components/Reveal";
 import { Button } from "@/components/ui/button";
 import { REPO } from "@/content/snippets";
@@ -45,16 +46,22 @@ function Architecture() {
       </Reveal>
 
       <Reveal delay={80} className="mt-10">
-        <figure className="overflow-hidden rounded-lg border border-border bg-code shadow-sm">
+        <figure className="overflow-hidden rounded-lg border border-border bg-card shadow-sm">
           <div className="overflow-x-auto">
             <img
               src={architectureAsset.url}
               alt="Nonna dependency injection framework architecture diagram showing the build-time compiler, runtime injector, framework integrations, and samples."
-              className="block h-auto min-w-[760px] max-w-none md:min-w-0 md:w-full"
+              className="hidden h-auto min-w-[760px] max-w-none dark:block md:min-w-0 md:w-full"
+              loading="eager"
+            />
+            <img
+              src={architectureLightAsset.url}
+              alt="Nonna dependency injection framework architecture diagram showing the build-time compiler, runtime injector, framework integrations, and samples."
+              className="block h-auto min-w-[760px] max-w-none dark:hidden md:min-w-0 md:w-full"
               loading="eager"
             />
           </div>
-          <figcaption className="border-t border-code-border px-4 py-3 font-mono text-xs text-code-foreground/70">
+          <figcaption className="border-t border-border px-4 py-3 font-mono text-xs text-muted-foreground">
             Build-time metadata extraction feeds runtime injectors and framework bindings without
             reflection.
           </figcaption>
