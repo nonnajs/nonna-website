@@ -8,7 +8,7 @@ import { snippets } from "@/content/snippets";
 
 const TITLE = "Get Started — Nonna";
 const DESC =
-  "Install @nonna/di, define services with @Injectable(), wire them at build time with @nonna/compiler, and bootstrap with Nonna.injector().scan().build().";
+  "Install @nonnajs/di, define services with @Injectable(), wire them at build time with @nonnajs/compiler, and bootstrap with Nonna.injector().scan().build().";
 
 export const Route = createFileRoute("/docs")({
   head: () => ({
@@ -195,7 +195,7 @@ function Docs() {
 
         <div className="min-w-0">
           <Section id="installation" index={1} title="Installation">
-            <P text="`@nonna/di` is the runtime; `@nonna/compiler` is a dev dependency that runs before your build." />
+            <P text="`@nonnajs/di` is the runtime; `@nonnajs/compiler` is a dev dependency that runs before your build." />
             <FrameworkTabs
               tabs={[
                 { id: "npm", label: "npm", content: <CodeBlock lang="sh" code={snippets.installNpm} /> },

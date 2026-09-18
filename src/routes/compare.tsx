@@ -30,7 +30,7 @@ const yes = (note?: string): Cell => ({ kind: "yes", note });
 const no = (note?: string): Cell => ({ kind: "no", note });
 const partial = (note?: string): Cell => ({ kind: "partial", note });
 
-const cols = ["@nonna/di", "TypeDI", "InversifyJS", "tsyringe"];
+const cols = ["@nonnajs/di", "TypeDI", "InversifyJS", "tsyringe"];
 const rows: { label: string; cells: Cell[] }[] = [
   {
     label: "Zero runtime deps",
@@ -42,7 +42,7 @@ const rows: { label: string; cells: Cell[] }[] = [
   },
   {
     label: "AOT compilation",
-    cells: [yes("`@nonna/compiler`"), no("runtime reflection"), no("runtime reflection"), no("runtime reflection")],
+    cells: [yes("`@nonnajs/compiler`"), no("runtime reflection"), no("runtime reflection"), no("runtime reflection")],
   },
   {
     label: "Deno / Bun / Edge support",
