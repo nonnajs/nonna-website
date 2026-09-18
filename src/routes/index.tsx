@@ -87,7 +87,7 @@ function Home() {
       <section className="relative overflow-hidden">
         <div className="bg-grid pointer-events-none absolute inset-0" />
         <div className="relative mx-auto grid max-w-6xl gap-12 px-4 pb-20 pt-16 sm:px-6 lg:grid-cols-[1fr_1.05fr] lg:items-center lg:pt-24">
-          <div className="animate-fade-up">
+          <div className="min-w-0 animate-fade-up">
             <div className="flex flex-wrap gap-2">
               <span className="pill pill-amber">Zero Dependencies</span>
               <span className="pill">Zero Reflection</span>
@@ -116,7 +116,7 @@ function Home() {
             </div>
             <InstallCommand command={snippets.install} className="mt-6" />
           </div>
-          <div className="animate-fade-up [animation-delay:120ms]">
+          <div className="min-w-0 animate-fade-up [animation-delay:120ms]">
             <CodeBlock code={snippets.heroQuickstart} lang="ts" title="quickstart" />
           </div>
         </div>

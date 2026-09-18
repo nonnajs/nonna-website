@@ -38,7 +38,7 @@ export function Reveal({
     <Tag
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ref={ref as any}
-      className={cn("reveal", className)}
+      className={cn("reveal min-w-0", className)}
       style={{ transitionDelay: `${delay}ms` }}
     >
       {children}
