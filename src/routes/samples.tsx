@@ -32,14 +32,14 @@ function Samples() {
         <SectionHeading
           eyebrow="samples"
           title="Proof, not promises."
-          body="11 runnable sample applications in the repo prove full compatibility across every runtime and framework Nonna supports."
+          body="11 runnable sample applications each live in their own repo and prove full compatibility across every runtime and framework Nonna supports."
         />
       </Reveal>
       <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {samples.map((s, i) => (
           <Reveal key={s.name} delay={(i % 3) * 60}>
             <a
-              href={`${REPO}/tree/main/samples/${s.name}`}
+              href={`https://github.com/nonnajs/${s.name}`}
               target="_blank"
               rel="noreferrer"
               className="card-lift group flex h-full flex-col gap-3 rounded-lg border border-border bg-card p-5"
