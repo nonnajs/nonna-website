@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { Github, Linkedin } from "lucide-react";
 import { Wordmark } from "./Icons";
 import { REPO, packages } from "@/content/snippets";
 
