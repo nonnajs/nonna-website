@@ -34,7 +34,7 @@ function useTheme() {
 function useStars() {
   const [stars, setStars] = useState<number | null>(null);
   useEffect(() => {
-    fetch("https://api.github.com/repos/nodejs-boot/nonna")
+    fetch("https://api.github.com/repos/nonnajs/nonna")
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => {
         if (d && typeof d.stargazers_count === "number") setStars(d.stargazers_count);
