@@ -49,6 +49,7 @@
   /* Nonna extras */
   --color-code: var(--code);
   --color-code-border: var(--code-border);
+  --color-code-foreground: var(--code-foreground);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
   --color-amber: var(--amber);
@@ -115,6 +116,7 @@
 
   --code: oklch(0.2 0.012 280);
   --code-border: oklch(0.32 0.012 280);
+  --code-foreground: oklch(0.93 0.005 80);
   --surface: oklch(0.975 0.004 80);
   --surface-2: oklch(0.955 0.005 80);
   --amber: oklch(0.7 0.17 60);
@@ -158,6 +160,7 @@
 
   --code: oklch(0.125 0.008 285);
   --code-border: oklch(1 0 0 / 9%);
+  --code-foreground: oklch(0.93 0.005 80);
   --surface: oklch(0.165 0.009 285);
   --surface-2: oklch(0.2 0.01 285);
   --amber: oklch(0.8 0.16 70);

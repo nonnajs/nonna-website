@@ -93,7 +93,7 @@ export function CodeBlock({ code, lang = "ts", title, className, compact }: Prop
         {lang === "sh" ? (
           <pre
             className={cn(
-              "min-w-max px-4 font-mono text-[13px] leading-relaxed text-foreground dark:text-foreground",
+              "min-w-max px-4 font-mono text-[13px] leading-relaxed text-code-foreground",
               compact ? "py-3" : "py-4",
             )}
           >
@@ -108,7 +108,7 @@ export function CodeBlock({ code, lang = "ts", title, className, compact }: Prop
             {({ tokens, getLineProps, getTokenProps }) => (
               <pre
                 className={cn(
-                  "min-w-max px-4 font-mono text-[13px] leading-relaxed",
+                  "min-w-max px-4 font-mono text-[13px] leading-relaxed text-code-foreground",
                   compact ? "py-3" : "py-4",
                 )}
               >
@@ -140,14 +140,14 @@ export function InstallCommand({ command, className }: { command: string; classN
       type="button"
       onClick={copy}
       className={cn(
-        "group inline-flex max-w-full cursor-pointer items-center gap-3 rounded-lg border border-code-border bg-code px-4 py-2.5 font-mono text-sm text-foreground transition-colors hover:border-amber/50",
+        "group inline-flex max-w-full cursor-pointer items-center gap-3 rounded-lg border border-code-border bg-code px-4 py-2.5 font-mono text-sm text-code-foreground transition-colors hover:border-amber/50",
         className,
       )}
       aria-label={`Copy ${command}`}
     >
       <span className="text-amber select-none">$</span>
       <span className="truncate">{command}</span>
-      <span className="ml-1 text-muted-foreground transition-colors group-hover:text-foreground">
+      <span className="ml-1 text-code-foreground/50 transition-colors group-hover:text-code-foreground">
         {copied ? <Check className="size-4 text-amber" /> : <Copy className="size-4" />}
       </span>
     </button>
