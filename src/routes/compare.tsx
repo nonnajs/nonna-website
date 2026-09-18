@@ -5,9 +5,9 @@ import { Inline } from "@/components/Inline";
 import { Reveal, SectionHeading } from "@/components/Reveal";
 import { comparisonBullets } from "@/content/snippets";
 
-const TITLE = "Compare — Nonna vs TypeDI, InversifyJS, tsyringe";
+const TITLE = "Nonna vs TypeDI, InversifyJS, tsyringe & More";
 const DESC =
-  "How Nonna's AOT, zero-reflection approach compares with reflect-metadata-based DI frameworks like TypeDI, InversifyJS, and tsyringe.";
+  "Compare Nonna with TypeDI, InversifyJS, tsyringe, NestJS DI, Awilix, and BottleJS. See why Nonna is a zero-reflection, AOT alternative for JavaScript and TypeScript.";
 
 export const Route = createFileRoute("/compare")({
   head: () => ({

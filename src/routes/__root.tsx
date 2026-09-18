@@ -81,13 +81,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Nonna — Dependency Injection Without the Reflection Tax" },
+      { title: "JavaScript & TypeScript Dependency Injection — Nonna" },
       {
         name: "description",
         content:
-          "A lightweight, zero-reflection, runtime-agnostic Dependency Injection framework and AOT compiler for modern JavaScript and TypeScript. Runs on Node.js, Deno, Bun, and the edge.",
+          "Nonna is a fast, zero-reflection dependency injection framework and AOT compiler for JavaScript and TypeScript, built for every modern runtime.",
       },
       { name: "author", content: "Manuel Santos" },
+      { name: "creator", content: "Manuel Santos" },
+      { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1" },
+      { name: "googlebot", content: "index, follow, max-image-preview:large, max-snippet:-1" },
       { property: "og:site_name", content: "Nonna" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

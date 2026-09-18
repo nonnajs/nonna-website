@@ -6,9 +6,9 @@ import { Reveal, SectionHeading } from "@/components/Reveal";
 import { Button } from "@/components/ui/button";
 import { REPO } from "@/content/snippets";
 
-const TITLE = "Architecture — Nonna";
+const TITLE = "Zero-Reflection DI Architecture — Nonna";
 const DESC =
-  "A visual map of Nonna's zero-reflection dependency injection architecture, from the static AOT compiler to runtime injectors and framework bindings.";
+  "See how Nonna compiles JavaScript and TypeScript dependency graphs ahead of time, avoiding runtime reflection across Node.js, Deno, Bun, browsers, and edge runtimes.";
 
 export const Route = createFileRoute("/architecture")({
   head: () => ({

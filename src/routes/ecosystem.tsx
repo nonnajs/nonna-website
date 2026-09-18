@@ -6,9 +6,9 @@ import { Inline } from "@/components/Inline";
 import { Reveal, SectionHeading } from "@/components/Reveal";
 import { REPO, packages, snippets } from "@/content/snippets";
 
-const TITLE = "Ecosystem — Nonna";
+const TITLE = "DI for React, Vue, Svelte & More — Nonna";
 const DESC =
-  "Every @nonnajs/* package: the zero-dependency DI core, the AOT compiler, and first-class bindings for React, Vue 3, Svelte 5, Web Components, and StencilJS.";
+  "Explore @nonnajs dependency injection packages for React, Vue 3, Svelte 5, Web Components, StencilJS, Node.js, Deno, Bun, and edge runtimes.";
 
 export const Route = createFileRoute("/ecosystem")({
   head: () => ({

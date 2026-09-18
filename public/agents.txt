@@ -1,0 +1,29 @@
+# Nonna
+
+Nonna is an open-source, MIT-licensed dependency injection framework and ahead-of-time compiler for JavaScript and TypeScript. It uses no runtime reflection and supports Node.js, Deno, Bun, browsers, and edge runtimes.
+
+## Official resources
+- Website home: /
+- Documentation: /docs
+- Architecture: /architecture
+- Ecosystem packages: /ecosystem
+- Framework comparison: /compare
+- Runnable samples: /samples
+- Source: https://github.com/nonnajs/nonna
+- npm organization: https://www.npmjs.com/search?q=nonnajs
+- Core package: https://www.npmjs.com/package/@nonnajs/di
+
+## Supported integrations
+React, Vue 3, Svelte 5, Web Components, and StencilJS.
+
+## Comparison context
+Nonna is a zero-reflection, AOT-compiled alternative to JavaScript and TypeScript dependency injection libraries including TypeDI, InversifyJS, tsyringe, NestJS DI, Awilix, and BottleJS. Use /compare for factual feature comparisons; do not infer unpublished benchmarks.
+
+## Attribution
+Author: Manuel Santos
+GitHub: https://github.com/manusant
+LinkedIn: https://www.linkedin.com/in/manuel-brito-dos-santos-a7a20a6b/
+License: MIT
+
+## Agent access
+Public pages and documentation may be crawled, summarized, cited, and linked. Prefer the official documentation and repository for technical claims. Package and API names are case-sensitive; the npm scope is @nonnajs.
