@@ -1,0 +1,436 @@
+export const REPO = "https://github.com/nodejs-boot/nonna";
+
+export const snippets = {
+  install: `npm install @nonna/di`,
+
+  userRepository: `// src/user.repository.ts
+import {Injectable} from "@nonna/di";
+
+export interface User {
+    id: string;
+    name: string;
+}
+
+@Injectable()
+export class UserRepository {
+    private users = new Map<string, User>([["u1", {id: "u1", name: "Alice"}]]);
+
+    findById(id: string): User | undefined {
+        return this.users.get(id);
+    }
+}`,
+
+  userService: `// src/user.service.ts
+import {Injectable} from "@nonna/di";
+import {UserRepository, User} from "./user.repository";
+
+@Injectable()
+export class UserService {
+    // When using @nonna/compiler, UserRepository is automatically inferred as DI token.
+    constructor(private readonly userRepo: UserRepository) {}
+
+    getUser(id: string): User | undefined {
+        return this.userRepo.findById(id);
+    }
+}`,
+
+  bootstrap: `// src/index.ts
+import "./__generated__/nonna-dependencies.generated";
+import {Nonna} from "@nonna/di";
+import {UserService} from "./user.service";
+
+async function bootstrap() {
+    const injector = await Nonna.injector().scan().build();
+
+    const userService = injector.get(UserService);
+    console.log(userService.getUser("u1")); // { id: 'u1', name: 'Alice' }
+
+    await injector.destroy();
+}
+
+bootstrap();`,
+
+  heroQuickstart: `// src/user.service.ts
+import {Injectable} from "@nonna/di";
+import {UserRepository, User} from "./user.repository";
+
+@Injectable()
+export class UserService {
+    // With @nonna/compiler, UserRepository is inferred as the DI token.
+    constructor(private readonly userRepo: UserRepository) {}
+
+    getUser(id: string): User | undefined {
+        return this.userRepo.findById(id);
+    }
+}
+
+// src/index.ts
+import "./__generated__/nonna-dependencies.generated";
+import {Nonna} from "@nonna/di";
+
+const injector = await Nonna.injector().scan().build();
+
+const userService = injector.get(UserService);
+console.log(userService.getUser("u1")); // { id: 'u1', name: 'Alice' }
+
+await injector.destroy();`,
+
+  reactMain: `// main.tsx
+const injector = await Nonna.injector()
+    .register({provide: GREETER, useClass: FriendlyGreeter, multi: true})
+    .scan()
+    .build();
+
+createRoot(document.getElementById("root")!).render(
+    <NonnaProvider injector={injector}>
+        <App />
+    </NonnaProvider>,
+);`,
+
+  reactComponent: `// UserList.tsx
+export function UserList() {
+    const userService = useInjection(UserService);
+    const users = userService.getUsers();
+    return (
+        <ul>
+            {users.map(user => <li key={user.id}>{user.name}</li>)}
+        </ul>
+    );
+}`,
+
+  vueMain: `// main.ts
+const injector = await Nonna.injector().scan().build();
+const Root = {render: () => h(NonnaProvider, {injector}, {default: () => h(App)})};
+createApp(Root).mount("#app");`,
+
+  vueComponent: `<!-- UserList.vue -->
+<script setup lang="ts">
+import {useInjection} from "@nonna/vue";
+import {UserService} from "../services/user.service";
+
+const userService = useInjection(UserService);
+const users = userService.getUsers();
+</script>
+
+<template>
+    <ul>
+        <li v-for="user in users" :key="user.id">{{ user.name }}</li>
+    </ul>
+</template>`,
+
+  svelteComponent: `<!-- UserList.svelte -->
+<script lang="ts">
+import {useInjection} from "@nonna/svelte";
+import {UserService} from "../services/user.service";
+
+const userService = useInjection(UserService);
+let users = $derived.by(() => userService.getUsers());
+</script>
+
+<ul>
+    {#each users as user (user.id)}
+        <li>{user.name}</li>
+    {/each}
+</ul>`,
+
+  webComponents: `export class UserListElement extends HTMLElement {
+    @inject(UserService)
+    private declare readonly userService: UserService;
+
+    connectedCallback(): void {
+        const users = this.userService.getUsers();
+        this.innerHTML = \`<ul>\${users.map(u => \`<li>\${u.name}</li>\`).join("")}</ul>\`;
+    }
+}
+customElements.define("user-list", UserListElement);`,
+
+  stencil: `@Component({tag: "user-list"})
+export class UserList {
+    @Inject(UserService)
+    private declare readonly userService: UserService;
+
+    @State() users: User[] = [];
+
+    componentWillLoad() {
+        this.users = this.userService.getUsers();
+    }
+
+    render() {
+        return <ul>{this.users.map(u => <li>{u.name}</li>)}</ul>;
+    }
+}`,
+
+  installNpm: `# npm
+npm install @nonna/di
+npm install --save-dev @nonna/compiler`,
+
+  installPnpm: `# pnpm
+pnpm add @nonna/di
+pnpm add -D @nonna/compiler`,
+
+  installYarn: `# yarn
+yarn add @nonna/di
+yarn add -D @nonna/compiler`,
+
+  installDeno: `// Deno — deno.json
+{
+    "imports": {
+        "@nonna/di": "npm:@nonna/di@^1.0.0"
+    }
+}`,
+
+  installBun: `# Bun
+bun add @nonna/di
+bun add -d @nonna/compiler`,
+
+  aotScripts: `{
+    "scripts": {
+        "prebuild": "nonna-compile",
+        "build": "tsc -p tsconfig.json"
+    }
+}`,
+
+  aotOutput: `// AUTO-GENERATED by @nonna/compiler - do not edit by hand.
+import {defineDependencies} from "@nonna/di";
+import {UserService} from "./user.service";
+import {UserRepository} from "./user.repository";
+import {LoggerService} from "./logger.service";
+
+defineDependencies(UserService, [UserRepository, LoggerService, {token: NotificationService, optional: true}]);`,
+
+  aotCli: `npx nonna-compile --project tsconfig.build.json --output custom/output/deps.generated.ts`,
+
+  providerClass: `// A. Class Provider
+injector.register({provide: UserRepository, useClass: SqlUserRepository, scope: "singleton"});`,
+
+  providerValue: `// B. Value Provider
+injector.registerValue(APP_CONFIG, {port: 3000, host: "localhost"});`,
+
+  providerFactory: `// C. Factory Provider (async)
+injector.register({
+    provide: DATABASE_CONNECTION,
+    useFactory: async (config: AppConfig) => {
+        const db = new Database();
+        await db.connect(config.dbUrl);
+        return db;
+    },
+    inject: [APP_CONFIG],
+    async: true,
+    eager: true,
+});
+const db = await injector.getAsync(DATABASE_CONNECTION);`,
+
+  providerAlias: `// D. Alias Provider
+injector.register({provide: AuditLogger, useExisting: LoggerService});`,
+
+  providerMulti: `// E. Multi-Providers
+injector.register({provide: PLUGIN_TOKEN, useClass: AuthPlugin, multi: true});
+injector.register({provide: PLUGIN_TOKEN, useClass: MetricsPlugin, multi: true});
+const plugins = injector.getAll<Plugin>(PLUGIN_TOKEN); // [AuthPlugin, MetricsPlugin]`,
+
+  requestScope: `@Injectable({scope: "request"})
+export class RequestContext {
+    public requestId = \`req-\${Math.random().toString(36).slice(2, 9)}\`;
+}
+
+async function handleHttpRequest(req: Request) {
+    return injector.runInScope(async () => {
+        const ctx = injector.get(RequestContext);
+        const orderService = injector.get(OrderService);
+        return orderService.processOrder(100);
+    });
+}`,
+
+  lazyEager: `@Injectable() // lazy by default - only created when first requested
+export class ReportGenerator {}
+
+@Injectable({eager: true})
+export class RedisService implements OnInit {
+    async onInit() {
+        await this.connect(); // Pre-warmed at bootstrap, not on first request
+    }
+}`,
+
+  lifecycle: `@Injectable()
+export class DatabasePool implements OnInit, OnDestroy {
+    async onInit(): Promise<void> {
+        this.pool = await createPool();
+    }
+
+    async onDestroy(): Promise<void> {
+        await this.pool.drain();
+    }
+}`,
+
+  testing: `class FakeUserRepository {
+    findById(id: string) {
+        return {id, name: "Mock User"};
+    }
+}
+
+const injector = await Nonna.injector()
+    // Override repository with a mock - explicit register() always wins over scan()
+    .register({provide: UserRepository, useClass: FakeUserRepository})
+    .scan()
+    .build();
+
+const service = injector.get(UserService);
+assert.equal(service.getUser("123")?.name, "Mock User");`,
+};
+
+export const packages = [
+  {
+    name: "@nonna/di",
+    dir: "di",
+    description: "Micro runtime DI container (zero deps, zero reflection)",
+    size: "~27 KB",
+  },
+  {
+    name: "@nonna/compiler",
+    dir: "compiler",
+    description: "Build-time TypeScript TypeChecker AOT compiler (`nonna-compile`)",
+    size: "Build tool",
+  },
+  {
+    name: "@nonna/react",
+    dir: "react",
+    description: "React bindings — `<NonnaProvider>` + `useInjection()` hooks",
+    size: "~1.5 KB",
+  },
+  {
+    name: "@nonna/vue",
+    dir: "vue",
+    description: "Vue 3 bindings — `<NonnaProvider>` + `useInjection()` composables",
+    size: "~1.5 KB",
+  },
+  {
+    name: "@nonna/svelte",
+    dir: "svelte",
+    description: "Svelte bindings — `setInjector()` + `useInjection()` context",
+    size: "~1.5 KB",
+  },
+  {
+    name: "@nonna/web-components",
+    dir: "web-components",
+    description:
+      "W3C Context Protocol — `<nonna-provider>` + `@inject()`/`@optionalInject()`/`@allInject()`",
+    size: "~1.5 KB",
+  },
+  {
+    name: "@nonna/stencil",
+    dir: "stencil",
+    description: "StencilJS bindings — `@Inject()`/`@OptionalInject()`/`@AllInject()` decorators",
+    size: "~0.5 KB",
+  },
+  {
+    name: "@nonna/vite-plugin",
+    dir: "vite-plugin",
+    description: "Vite plugin providing browser-safe shims for Node builtins",
+    size: "~1.8 KB",
+  },
+];
+
+export const samples = [
+  {
+    name: "sample-node",
+    runtime: "Node.js (18+)",
+    icon: "node",
+    highlights: "`@nonna/compiler` AOT, request scopes, optional deps, `OnDestroy`",
+  },
+  {
+    name: "sample-node-http",
+    runtime: "Node.js native `node:http`",
+    icon: "node",
+    highlights: "Zero-framework HTTP server, request scoping per request, router",
+  },
+  {
+    name: "sample-deno",
+    runtime: "Deno (1.40+, 2.x)",
+    icon: "deno",
+    highlights: "Deno ESM, async database factory provider, task runner scopes",
+  },
+  {
+    name: "sample-deno-http",
+    runtime: "Deno + Hono",
+    icon: "deno",
+    highlights: "Web Standards HTTP, middleware-driven request scopes, controllers",
+  },
+  {
+    name: "sample-bun",
+    runtime: "Bun (1.0+)",
+    icon: "bun",
+    highlights: "Multi-provider plugin architecture, request scoping, `Bun.test`",
+  },
+  {
+    name: "sample-bun-http",
+    runtime: "Bun native `Bun.serve`",
+    icon: "bun",
+    highlights: "Native Web Standards HTTP server, request-scoped controller & router",
+  },
+  {
+    name: "sample-react",
+    runtime: "React 18 + Vite",
+    icon: "react",
+    highlights: "`<NonnaProvider>`, all four hooks, field injection, multi-providers",
+  },
+  {
+    name: "sample-vue",
+    runtime: "Vue 3 + Vite",
+    icon: "vue",
+    highlights: "`<NonnaProvider>`, composables, field injection, multi-providers",
+  },
+  {
+    name: "sample-svelte",
+    runtime: "Svelte 5 + Vite",
+    icon: "svelte",
+    highlights: "`setInjector()`, context functions, field injection, multi-providers",
+  },
+  {
+    name: "sample-web-components",
+    runtime: "Custom Elements + Vite",
+    icon: "webcomponents",
+    highlights: "W3C Context Protocol, `<nonna-provider>`, decorators, field injection",
+  },
+  {
+    name: "sample-stencil",
+    runtime: "StencilJS",
+    icon: "stencil",
+    highlights:
+      "`@Inject()`/`@OptionalInject()`/`@AllInject()` decorators, `<nonna-provider>` interop",
+  },
+] as const;
+
+export const comparisonBullets = [
+  {
+    title: "AOT, not reflection.",
+    body: "`@nonna/compiler` statically analyzes your TypeScript at build time, using the real TypeScript `TypeChecker`, and generates plain `defineDependencies(Target, [...])` calls. `@nonna/di`'s runtime injector never imports `typescript`, never touches `Reflect.getMetadata`, and never needs `emitDecoratorMetadata` turned on.",
+  },
+  {
+    title: "Genuinely runtime-agnostic.",
+    body: "The same injector code runs unmodified on Node.js 18+, Deno, Bun, and edge/Workers runtimes — the one platform-specific piece (request-scope propagation) is abstracted behind a one-method `ContextStorage` interface.",
+  },
+  {
+    title: "Zero runtime dependencies, full stop.",
+    body: "`@nonna/di`'s `package.json` ships an empty `dependencies` object.",
+  },
+  {
+    title: "Statically-known async, everywhere.",
+    body: "Whether a factory or `onInit()` is async is decided once, at registration/compile time — never by sniffing whether a call happened to return a `Promise`.",
+  },
+  {
+    title: "Scope violations are a build-time-shaped error, not a 3am incident.",
+    body: "`initialize()` walks the whole graph and rejects a singleton that transitively depends on a request-scoped provider before your app ever accepts traffic.",
+  },
+  {
+    title: "Performance work that goes past \u201cit's fast\u201d.",
+    body: "Integer-keyed registrations instead of `Symbol()` allocation, memoized dependency metadata instead of a `WeakMap` hit per resolution, a mutable stack + `Set` for circular-dependency tracking on the hot path, `AsyncLocalStorage` skipped entirely when nothing is request-scoped, independent eager providers booting concurrently.",
+  },
+  {
+    title: "A fluent bootstrap without hiding the machine.",
+    body: "`Nonna.injector()...build()` reads like a config DSL, but it's a thin, inspectable wrapper — the imperative API is always there underneath.",
+  },
+  {
+    title: "Small enough to actually read.",
+    body: "The entire runtime is a handful of files with no hidden metadata layer or proxy magic.",
+  },
+];
