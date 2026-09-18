@@ -7,6 +7,7 @@ import { REPO } from "@/content/snippets";
 
 const links = [
   { to: "/docs", label: "Docs" },
+  { to: "/architecture", label: "Architecture" },
   { to: "/ecosystem", label: "Ecosystem" },
   { to: "/compare", label: "Compare" },
   { to: "/samples", label: "Samples" },
