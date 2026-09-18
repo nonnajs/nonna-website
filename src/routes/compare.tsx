@@ -23,7 +23,7 @@ export const Route = createFileRoute("/compare")({
   component: Compare,
 });
 
-type Cell = { kind: "yes" | "no" | "partial"; note?: string };
+type Cell = { kind: "yes" | "no" | "partial"; note?: string | undefined };
 const yes = (note?: string): Cell => ({ kind: "yes", note });
 const no = (note?: string): Cell => ({ kind: "no", note });
 const partial = (note?: string): Cell => ({ kind: "partial", note });
