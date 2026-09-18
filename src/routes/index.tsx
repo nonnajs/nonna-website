@@ -18,9 +18,40 @@ import { Reveal, SectionHeading } from "@/components/Reveal";
 import { Button } from "@/components/ui/button";
 import { REPO, snippets } from "@/content/snippets";
 
-const TITLE = "Nonna — Dependency Injection Without the Reflection Tax";
+const TITLE = "JavaScript & TypeScript Dependency Injection — Nonna";
 const DESC =
-  "A lightweight, zero-reflection, runtime-agnostic Dependency Injection framework and AOT compiler for modern JavaScript and TypeScript. Runs on Node.js, Deno, Bun, and the edge.";
+  "Nonna is a fast, zero-reflection dependency injection framework and AOT compiler for JavaScript and TypeScript, built for Node.js, Deno, Bun, browsers, and the edge.";
+
+const softwareJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareSourceCode",
+  name: "Nonna",
+  description: DESC,
+  codeRepository: "https://github.com/nonnajs/nonna",
+  license: "https://opensource.org/license/mit",
+  programmingLanguage: ["TypeScript", "JavaScript"],
+  runtimePlatform: ["Node.js", "Deno", "Bun", "Browser", "Edge runtime"],
+  keywords: [
+    "dependency injection",
+    "JavaScript dependency injection",
+    "TypeScript dependency injection",
+    "zero reflection",
+    "AOT compiler",
+    "TypeDI alternative",
+    "InversifyJS alternative",
+    "tsyringe alternative",
+    "NestJS dependency injection alternative",
+    "Awilix alternative",
+  ],
+  author: {
+    "@type": "Person",
+    name: "Manuel Santos",
+    sameAs: [
+      "https://github.com/manusant",
+      "https://www.linkedin.com/in/manuel-brito-dos-santos-a7a20a6b/",
+    ],
+  },
+};
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -34,6 +65,12 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: "/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify(softwareJsonLd),
+      },
+    ],
   }),
   component: Home,
 });

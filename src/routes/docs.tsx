@@ -6,9 +6,9 @@ import { FrameworkTabs } from "@/components/FrameworkTabs";
 import { Inline } from "@/components/Inline";
 import { snippets } from "@/content/snippets";
 
-const TITLE = "Get Started — Nonna";
+const TITLE = "JavaScript & TypeScript DI Guide — Nonna";
 const DESC =
-  "Install @nonnajs/di, define services with @Injectable(), wire them at build time with @nonnajs/compiler, and bootstrap with Nonna.injector().scan().build().";
+  "Learn dependency injection in JavaScript and TypeScript with @nonnajs/di: installation, AOT compilation, providers, scopes, lifecycle hooks, testing, and API essentials.";
 
 export const Route = createFileRoute("/docs")({
   head: () => ({

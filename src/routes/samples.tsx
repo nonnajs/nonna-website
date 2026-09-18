@@ -5,9 +5,9 @@ import { Inline } from "@/components/Inline";
 import { Reveal, SectionHeading } from "@/components/Reveal";
 import { samples } from "@/content/snippets";
 
-const TITLE = "Samples — Nonna";
+const TITLE = "JavaScript & TypeScript DI Examples — Nonna";
 const DESC =
-  "11 runnable sample applications covering Node.js, Deno, Bun, React, Vue, Svelte, Web Components, and StencilJS — proof of full cross-runtime compatibility.";
+  "Runnable Nonna dependency injection examples for Node.js, Deno, Bun, React, Vue, Svelte, Web Components, and StencilJS, each with its own source repository.";
 
 export const Route = createFileRoute("/samples")({
   head: () => ({
