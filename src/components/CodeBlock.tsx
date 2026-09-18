@@ -93,7 +93,7 @@ export function CodeBlock({ code, lang = "ts", title, className, compact }: Prop
         {lang === "sh" ? (
           <pre
             className={cn(
-              "min-w-max px-4 font-mono text-[13px] leading-relaxed text-foreground dark:text-foreground",
+              "min-w-max px-4 font-mono text-[13px] leading-relaxed text-code-foreground",
               compact ? "py-3" : "py-4",
             )}
           >
@@ -108,7 +108,7 @@ export function CodeBlock({ code, lang = "ts", title, className, compact }: Prop
             {({ tokens, getLineProps, getTokenProps }) => (
               <pre
                 className={cn(
-                  "min-w-max px-4 font-mono text-[13px] leading-relaxed",
+                  "min-w-max px-4 font-mono text-[13px] leading-relaxed text-code-foreground",
                   compact ? "py-3" : "py-4",
                 )}
               >
