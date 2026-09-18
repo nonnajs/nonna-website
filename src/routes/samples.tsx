@@ -3,7 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import { BrandIcon } from "@/components/Icons";
 import { Inline } from "@/components/Inline";
 import { Reveal, SectionHeading } from "@/components/Reveal";
-import { REPO, samples } from "@/content/snippets";
+import { samples } from "@/content/snippets";
 
 const TITLE = "Samples — Nonna";
 const DESC =
