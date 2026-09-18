@@ -1,4 +1,4 @@
-export const REPO = "https://github.com/nodejs-boot/nonna";
+export const REPO = "https://github.com/nonnajs/nonna";
 
 export const snippets = {
   install: `npm install @nonnajs/di`,
