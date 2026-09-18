@@ -75,8 +75,7 @@ export function Navbar() {
               <Link
                 key={l.to}
                 to={l.to}
-                className="rounded-md px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
-                activeProps={{ className: "text-foreground" }}
+                className="rounded-md px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground data-[status=active]:font-medium data-[status=active]:text-foreground"
               >
                 {l.label}
               </Link>
@@ -135,8 +134,7 @@ export function Navbar() {
               key={l.to}
               to={l.to}
               onClick={() => setOpen(false)}
-              className="block rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-foreground"
-              activeProps={{ className: "text-foreground" }}
+              className="block rounded-md px-3 py-2 text-sm text-muted-foreground hover:text-foreground data-[status=active]:font-medium data-[status=active]:text-foreground"
             >
               {l.label}
             </Link>
