@@ -53,7 +53,7 @@ const pillars = [
   {
     icon: PackageCheck,
     title: "Zero Runtime Dependencies",
-    body: "`@nonna/di` ships an empty `dependencies` object and never requires `reflect-metadata`. Checked by a guardrail test, not just claimed.",
+    body: "`@nonnajs/di` ships an empty `dependencies` object and never requires `reflect-metadata`. Checked by a guardrail test, not just claimed.",
   },
   {
     icon: Globe,
@@ -63,7 +63,7 @@ const pillars = [
   {
     icon: Cpu,
     title: "Ahead-of-Time Compilation",
-    body: "`@nonna/compiler` statically inspects your TypeScript with the real `TypeChecker` at build time — constructor tokens are known before the process even starts.",
+    body: "`@nonnajs/compiler` statically inspects your TypeScript with the real `TypeChecker` at build time — constructor tokens are known before the process even starts.",
   },
   {
     icon: Waypoints,

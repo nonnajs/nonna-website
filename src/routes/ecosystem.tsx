@@ -8,7 +8,7 @@ import { REPO, packages, snippets } from "@/content/snippets";
 
 const TITLE = "Ecosystem — Nonna";
 const DESC =
-  "Every @nonna/* package: the zero-dependency DI core, the AOT compiler, and first-class bindings for React, Vue 3, Svelte 5, Web Components, and StencilJS.";
+  "Every @nonnajs/* package: the zero-dependency DI core, the AOT compiler, and first-class bindings for React, Vue 3, Svelte 5, Web Components, and StencilJS.";
 
 export const Route = createFileRoute("/ecosystem")({
   head: () => ({
@@ -39,7 +39,7 @@ function Ecosystem() {
           title="One core, seven packages."
           body={
             <>
-              Everything ships under the <code className="code-inline">@nonna/*</code> scope at{" "}
+              Everything ships under the <code className="code-inline">@nonnajs/*</code> scope at{" "}
               <code className="code-inline">1.0.0</code>. Install only what your stack needs.
             </>
           }

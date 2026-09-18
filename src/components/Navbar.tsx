@@ -86,7 +86,7 @@ export function Navbar() {
 
         <div className="flex items-center gap-2">
           <a
-            href="https://www.npmjs.com/package/@nonna/di"
+            href="https://www.npmjs.com/package/@nonnajs/di"
             target="_blank"
             rel="noreferrer"
             className="pill hidden sm:inline-flex hover:text-foreground"
