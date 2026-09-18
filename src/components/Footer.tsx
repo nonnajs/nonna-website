@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { Github, Linkedin } from "lucide-react";
 import { Wordmark } from "./Icons";
 import { REPO, packages } from "@/content/snippets";
 
@@ -58,8 +59,30 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-border">
-        <p className="mx-auto max-w-6xl px-4 py-5 font-mono text-xs text-muted-foreground sm:px-6">
-          © Nonna. MIT Licensed. Built by Manuel Santos.
+        <p className="mx-auto flex max-w-6xl flex-col items-start gap-2 px-4 py-5 font-mono text-xs text-muted-foreground sm:px-6 sm:flex-row sm:items-center sm:gap-3">
+          <span>© Nonna. MIT Licensed.</span>
+          <span className="hidden sm:inline">·</span>
+          <span className="flex items-center gap-2">
+            Built by{" "}
+            <a
+              href="https://github.com/manusant"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1 hover:text-foreground"
+            >
+              <Github className="size-3" />
+              Manuel Santos
+            </a>
+            <a
+              href="https://www.linkedin.com/in/manuel-brito-dos-santos-a7a20a6b/"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1 hover:text-foreground"
+            >
+              <Linkedin className="size-3" />
+              LinkedIn
+            </a>
+          </span>
         </p>
       </div>
     </footer>
