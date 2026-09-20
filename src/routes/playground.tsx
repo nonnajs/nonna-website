@@ -465,14 +465,14 @@ function Playground() {
           <div className="rounded-lg border border-border bg-card p-5">
             {error ? (
               <p className="font-mono text-sm text-destructive">{error}</p>
-            ) : !injector || !services ? (
+            ) : !built ? (
               <p className="font-mono text-sm text-muted-foreground">building injector…</p>
             ) : (
-              <NonnaProvider injector={injector}>
-                <div className="space-y-6">
+              <NonnaProvider injector={built.injector}>
+                <div className="space-y-6" key={built.generation}>
                   <GreetingBanner />
-                  <UserPanel services={services} />
-                  <InspectPanel services={services} />
+                  <UserPanel services={built.services} />
+                  <InspectPanel services={built.services} />
                 </div>
               </NonnaProvider>
             )}
