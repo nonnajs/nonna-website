@@ -11,5 +11,8 @@ export default defineConfig({
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
+    // Site has no server functions/loaders, so every route can be prerendered to plain
+    // HTML/JS/CSS under .output/public — that's what gets synced to S3 for static hosting.
+    prerender: { enabled: true, crawlLinks: true },
   },
 });

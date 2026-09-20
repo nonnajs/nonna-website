@@ -190,6 +190,12 @@ function Home() {
             body="Every pillar below is a concrete engineering constraint the runtime is built around — not a marketing bullet."
           />
         </Reveal>
+        <Reveal delay={40}>
+          <p className="mt-6 max-w-3xl border-l-2 border-amber pl-5 text-lg font-medium leading-relaxed tracking-tight sm:text-xl">
+            <b>Design philosophy:</b> <i>"shift as much DI reasoning as possible into
+            compile/initialization time, leaving an extremely small and predictable runtime."</i>
+          </p>
+        </Reveal>
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {pillars.map((p, i) => (
             <Reveal key={p.title} delay={i * 60}>
@@ -216,6 +222,20 @@ function Home() {
                   id: "node",
                   label: "Node",
                   icon: "node",
+                  content: <CodeBlock code={snippets.bootstrap} lang="ts" title="index.ts" />,
+                },
+                {
+                  id: "bun",
+                  label: "Bun",
+                  icon: "bun",
+                  intro: "Same code, zero changes — just run it with Bun.",
+                  content: <CodeBlock code={snippets.bootstrap} lang="ts" title="index.ts" />,
+                },
+                {
+                  id: "deno",
+                  label: "Deno",
+                  icon: "deno",
+                  intro: "Same code, zero changes — just run it with Deno.",
                   content: <CodeBlock code={snippets.bootstrap} lang="ts" title="index.ts" />,
                 },
                 {

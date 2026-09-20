@@ -20,6 +20,15 @@ dist-ssr
 .wrangler/
 .dev.vars
 
+# Terraform
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/*.tfvars
+terraform/crash.log
+terraform/override.tf
+terraform/override.tf.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

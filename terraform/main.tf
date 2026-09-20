@@ -1,4 +1,13 @@
 terraform {
+  required_version = ">= 1.5.0"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+
   backend "s3" {
     bucket = "nonna-tf-state"
     key    = "nonna-landing.tfstate"
@@ -11,9 +20,9 @@ provider "aws" {
 }
 
 locals {
-  region        = "eu-central-1"
-  bucket_name   = "nonna-website"
-  domain_name   = "nonna.nodeboot.io"
+  region      = "eu-central-1"
+  bucket_name = "nonna-website"
+  domain_name = "nonna.nodeboot.io"
 }
 
 ##########################
@@ -109,8 +118,8 @@ resource "aws_cloudfront_distribution" "cdn" {
     target_origin_id       = local.bucket_name
     viewer_protocol_policy = "redirect-to-https"
 
-    allowed_methods  = ["GET", "HEAD"]
-    cached_methods   = ["GET", "HEAD"]
+    allowed_methods = ["GET", "HEAD"]
+    cached_methods  = ["GET", "HEAD"]
 
     forwarded_values {
       query_string = false
@@ -127,15 +136,15 @@ resource "aws_cloudfront_distribution" "cdn" {
   }
 
   custom_error_response {
-    error_code            = 403
-    response_code         = 200
-    response_page_path    = "/index.html"
+    error_code         = 403
+    response_code      = 200
+    response_page_path = "/index.html"
   }
 
   custom_error_response {
-    error_code            = 404
-    response_code         = 200
-    response_page_path    = "/index.html"
+    error_code         = 404
+    response_code      = 200
+    response_page_path = "/index.html"
   }
 
   price_class = "PriceClass_100"
