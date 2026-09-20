@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { type FormEvent, useCallback, useEffect, useState } from "react";
-import { Nonna, type Injector } from "@nonnajs/di";
+import { Injector, type ContextStorage, type RequestScopeStore } from "@nonnajs/di";
 import {
   NonnaProvider,
   useAllInjections,
@@ -51,23 +51,50 @@ interface Config {
   flags: boolean;
 }
 
+/**
+ * Browsers have no `node:async_hooks`, so supply a synchronous ContextStorage instead of the
+ * default AsyncLocalStorage-backed one — exactly the escape hatch `InjectorOptions` exists for.
+ */
+class SyncContextStorage<T> implements ContextStorage<T> {
+  private current: T | undefined;
+  run<R>(store: T, fn: () => R): R {
+    const previous = this.current;
+    this.current = store;
+    try {
+      return fn();
+    } finally {
+      this.current = previous;
+    }
+  }
+  getStore(): T | undefined {
+    return this.current;
+  }
+}
+
 async function buildInjector(config: Config): Promise<Injector> {
-  const builder = Nonna.injector()
-    .register({ provide: UserRepository, useClass: UserRepository })
-    .register({ provide: LoggerService, useClass: LoggerService })
-    .register({ provide: UserService, useClass: UserService });
+  const injector = Injector.create({
+    contextStorage: new SyncContextStorage<RequestScopeStore>(),
+  });
+
+  injector.register({ provide: UserRepository, useClass: UserRepository });
+  injector.register({ provide: LoggerService, useClass: LoggerService });
+  injector.register({ provide: UserService, useClass: UserService });
 
   if (config.friendly) {
-    builder.register({ provide: GREETER, useClass: FriendlyGreeter, multi: true });
+    injector.register({ provide: GREETER, useClass: FriendlyGreeter, multi: true });
   }
   if (config.formal) {
-    builder.register({ provide: GREETER, useClass: FormalGreeter, multi: true });
+    injector.register({ provide: GREETER, useClass: FormalGreeter, multi: true });
   }
   if (config.flags) {
-    builder.register({ provide: FEATURE_FLAGS, useValue: { betaBanner: true } satisfies FeatureFlags });
+    injector.register({
+      provide: FEATURE_FLAGS,
+      useValue: { betaBanner: true } satisfies FeatureFlags,
+    });
   }
 
-  return builder.build();
+  await injector.initialize();
+  return injector;
 }
 
 const bootstrapCode = `import { Nonna } from "@nonnajs/di";
