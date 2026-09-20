@@ -1,6 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { type FormEvent, useCallback, useEffect, useState } from "react";
-import { Injector, type ContextStorage, type RequestScopeStore } from "@nonnajs/di";
+import { type FormEvent, useCallback, useEffect, useMemo, useState } from "react";
+import {
+  Injector,
+  defineDependencies,
+  type ContextStorage,
+  type RequestScopeStore,
+} from "@nonnajs/di";
 import {
   NonnaProvider,
   useAllInjections,
@@ -8,26 +13,20 @@ import {
   useInjector,
   useOptionalInjection,
 } from "@nonnajs/react";
-import { ArrowUpRight, RotateCcw } from "lucide-react";
-import "@/playground/nonna-dependencies.generated";
+import { ArrowUpRight, Play, RotateCcw } from "lucide-react";
+import { FEATURE_FLAGS, GREETER, type FeatureFlags, type Greeter } from "@/playground/services";
 import {
-  FEATURE_FLAGS,
-  FormalGreeter,
-  FriendlyGreeter,
-  GREETER,
-  LoggerService,
-  UserRepository,
-  UserService,
-  type FeatureFlags,
-  type Greeter,
-} from "@/playground/services";
+  SERVICE_SOURCES,
+  compileServices,
+  type CompiledServices,
+} from "@/playground/sources";
 import { CodeBlock } from "@/components/CodeBlock";
 import { Reveal, SectionHeading } from "@/components/Reveal";
 import { cn } from "@/lib/utils";
 
 const TITLE = "Live React DI Playground — Nonna";
 const DESC =
-  "Run @nonnajs/react in the browser: build an injector, register multi and optional providers, and resolve them with useInjection, useAllInjections, useOptionalInjection and useInjector.";
+  "Edit real service classes and run @nonnajs/react in the browser: build an injector, register multi and optional providers, and resolve them with useInjection, useAllInjections, useOptionalInjection and useInjector.";
 
 export const Route = createFileRoute("/playground")({
   head: () => ({
@@ -71,20 +70,25 @@ class SyncContextStorage<T> implements ContextStorage<T> {
   }
 }
 
-async function buildInjector(config: Config): Promise<Injector> {
+async function buildInjector(config: Config, services: CompiledServices): Promise<Injector> {
   const injector = Injector.create({
     contextStorage: new SyncContextStorage<RequestScopeStore>(),
   });
 
-  injector.register({ provide: UserRepository, useClass: UserRepository });
-  injector.register({ provide: LoggerService, useClass: LoggerService });
-  injector.register({ provide: UserService, useClass: UserService });
+  // The shape `@nonnajs/compiler` emits: the constructor graph, declared once.
+  defineDependencies(services.LoggerService, []);
+  defineDependencies(services.UserRepository, []);
+  defineDependencies(services.UserService, [services.UserRepository, services.LoggerService]);
+
+  injector.register({ provide: services.UserRepository, useClass: services.UserRepository });
+  injector.register({ provide: services.LoggerService, useClass: services.LoggerService });
+  injector.register({ provide: services.UserService, useClass: services.UserService });
 
   if (config.friendly) {
-    injector.register({ provide: GREETER, useClass: FriendlyGreeter, multi: true });
+    injector.register({ provide: GREETER, useClass: services.FriendlyGreeter, multi: true });
   }
   if (config.formal) {
-    injector.register({ provide: GREETER, useClass: FormalGreeter, multi: true });
+    injector.register({ provide: GREETER, useClass: services.FormalGreeter, multi: true });
   }
   if (config.flags) {
     injector.register({
@@ -157,9 +161,9 @@ function GreetingBanner() {
   );
 }
 
-function UserPanel() {
-  const userService = useInjection(UserService);
-  const logger = useInjection(LoggerService);
+function UserPanel({ services }: { services: CompiledServices }) {
+  const userService = useInjection(services.UserService);
+  const logger = useInjection(services.LoggerService);
   const [tick, setTick] = useState(0);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -211,16 +215,17 @@ function UserPanel() {
         </pre>
       )}
       <p className="mt-2 text-xs text-muted-foreground">
-        The form and the list resolve the same singleton <code className="code-inline">UserService</code>
-        , which logs through the injected <code className="code-inline">LoggerService</code>.
+        The form and the list resolve the same singleton{" "}
+        <code className="code-inline">UserService</code>, which logs through the injected{" "}
+        <code className="code-inline">LoggerService</code>.
       </p>
     </section>
   );
 }
 
-function InspectPanel() {
+function InspectPanel({ services }: { services: CompiledServices }) {
   const injector = useInjector();
-  const inspection = injector.inspect(UserService);
+  const inspection = injector.inspect(services.UserService);
   if (!inspection) return null;
   return (
     <section>
@@ -275,18 +280,128 @@ function Toggle({
   );
 }
 
+const initialSources = () =>
+  Object.fromEntries(SERVICE_SOURCES.map((s) => [s.name, s.code])) as Record<string, string>;
+
+function ServiceEditor({
+  sources,
+  setSources,
+  onRun,
+  dirty,
+  compileError,
+}: {
+  sources: Record<string, string>;
+  setSources: (next: Record<string, string>) => void;
+  onRun: () => void;
+  dirty: boolean;
+  compileError: string | null;
+}) {
+  const [active, setActive] = useState(SERVICE_SOURCES[0]!.name);
+  const current = SERVICE_SOURCES.find((s) => s.name === active) ?? SERVICE_SOURCES[0]!;
+
+  return (
+    <div className="overflow-hidden rounded-lg border border-code-border bg-code">
+      <div className="flex flex-wrap gap-1 border-b border-code-border px-2 pt-2">
+        {SERVICE_SOURCES.map((s) => (
+          <button
+            key={s.name}
+            type="button"
+            onClick={() => setActive(s.name)}
+            className={cn(
+              "cursor-pointer rounded-t-md px-3 py-1.5 font-mono text-[12px] transition-colors",
+              s.name === active
+                ? "bg-card text-foreground"
+                : "text-code-foreground/60 hover:text-code-foreground",
+            )}
+          >
+            {s.name}
+          </button>
+        ))}
+      </div>
+
+      <textarea
+        spellCheck={false}
+        value={sources[current.name] ?? current.code}
+        onChange={(e) => setSources({ ...sources, [current.name]: e.target.value })}
+        rows={16}
+        className="block w-full resize-y bg-code px-4 py-3 font-mono text-[13px] leading-relaxed text-code-foreground outline-none"
+      />
+
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-code-border px-4 py-3">
+        <p className="min-w-0 flex-1 text-xs text-code-foreground/60">{current.note}</p>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setSources(initialSources())}
+            className="cursor-pointer rounded-md border border-code-border px-3 py-1.5 font-mono text-[12px] text-code-foreground/70 transition-colors hover:text-code-foreground"
+          >
+            reset
+          </button>
+          <button
+            type="button"
+            onClick={onRun}
+            className={cn(
+              "inline-flex cursor-pointer items-center gap-1.5 rounded-md px-3 py-1.5 font-mono text-[12px] font-medium transition-colors",
+              dirty
+                ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                : "border border-code-border text-code-foreground/70 hover:text-code-foreground",
+            )}
+          >
+            <Play className="size-3.5" />
+            run
+          </button>
+        </div>
+      </div>
+
+      {compileError && (
+        <p className="border-t border-destructive/40 bg-destructive/10 px-4 py-2 font-mono text-[12px] text-destructive">
+          {compileError}
+        </p>
+      )}
+    </div>
+  );
+}
+
 function Playground() {
   const [config, setConfig] = useState<Config>({ friendly: true, formal: true, flags: false });
+  const [sources, setSources] = useState<Record<string, string>>(initialSources);
+  const [applied, setApplied] = useState<Record<string, string>>(initialSources);
+  const [compileError, setCompileError] = useState<string | null>(null);
   const [injector, setInjector] = useState<Injector | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [nonce, setNonce] = useState(0);
 
+  const dirty = useMemo(
+    () => SERVICE_SOURCES.some((s) => sources[s.name] !== applied[s.name]),
+    [sources, applied],
+  );
+
+  const services = useMemo(() => {
+    try {
+      return compileServices(applied);
+    } catch {
+      return null;
+    }
+  }, [applied]);
+
+  const run = useCallback(() => {
+    try {
+      compileServices(sources);
+      setCompileError(null);
+      setApplied({ ...sources });
+      setNonce((n) => n + 1);
+    } catch (e: unknown) {
+      setCompileError(e instanceof Error ? e.message : String(e));
+    }
+  }, [sources]);
+
   useEffect(() => {
+    if (!services) return;
     let active = true;
     let built: Injector | undefined;
     setInjector(null);
     setError(null);
-    buildInjector(config)
+    buildInjector(config, services)
       .then((i) => {
         built = i;
         if (active) setInjector(i);
@@ -299,7 +414,7 @@ function Playground() {
       active = false;
       void built?.destroy();
     };
-  }, [config, nonce]);
+  }, [config, services, nonce]);
 
   const set = useCallback(
     (key: keyof Config) => (v: boolean) => setConfig((c) => ({ ...c, [key]: v })),
@@ -312,13 +427,17 @@ function Playground() {
         <SectionHeading
           eyebrow="playground"
           title="A real injector, running in this page."
-          body="This page boots an actual @nonnajs/di injector in your browser and resolves it through @nonnajs/react hooks — the same wiring as the sample-react repo. Toggle providers and the container is rebuilt live."
+          body="This page boots an actual @nonnajs/di injector in your browser and resolves it through @nonnajs/react hooks — the same wiring as the sample-react repo. Edit the service classes, hit run, and the container is rebuilt live."
         />
       </Reveal>
 
       <Reveal delay={60}>
         <div className="mt-10 flex flex-wrap items-center gap-2">
-          <Toggle label="GREETER → FriendlyGreeter" checked={config.friendly} onChange={set("friendly")} />
+          <Toggle
+            label="GREETER → FriendlyGreeter"
+            checked={config.friendly}
+            onChange={set("friendly")}
+          />
           <Toggle label="GREETER → FormalGreeter" checked={config.formal} onChange={set("formal")} />
           <Toggle label="FEATURE_FLAGS provider" checked={config.flags} onChange={set("flags")} />
           <button
@@ -337,24 +456,36 @@ function Playground() {
           <div className="rounded-lg border border-border bg-card p-5">
             {error ? (
               <p className="font-mono text-sm text-destructive">{error}</p>
-            ) : !injector ? (
+            ) : !injector || !services ? (
               <p className="font-mono text-sm text-muted-foreground">building injector…</p>
             ) : (
               <NonnaProvider injector={injector}>
                 <div className="space-y-6">
                   <GreetingBanner />
-                  <UserPanel />
-                  <InspectPanel />
+                  <UserPanel services={services} />
+                  <InspectPanel services={services} />
                 </div>
               </NonnaProvider>
             )}
           </div>
         </Reveal>
 
+        <Reveal delay={60}>
+          <ServiceEditor
+            sources={sources}
+            setSources={setSources}
+            onRun={run}
+            dirty={dirty}
+            compileError={compileError}
+          />
+        </Reveal>
+      </div>
+
+      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+        <Reveal delay={60}>
+          <CodeBlock code={bootstrapCode} lang="tsx" title="main.tsx" />
+        </Reveal>
         <div className="space-y-6">
-          <Reveal delay={60}>
-            <CodeBlock code={bootstrapCode} lang="tsx" title="main.tsx" />
-          </Reveal>
           <Reveal delay={120}>
             <CodeBlock code={hooksCode} lang="tsx" title="components" />
           </Reveal>
