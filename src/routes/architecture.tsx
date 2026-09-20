@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
-import architectureAsset from "@/assets/nonna-architecture.svg.asset.json";
-import architectureLightAsset from "@/assets/nonna-architecture-light.svg.asset.json";
+import architectureAsset from "@/assets/nonna-architecture.svg";
+import architectureLightAsset from "@/assets/nonna-architecture-light.svg";
 import { Reveal, SectionHeading } from "@/components/Reveal";
 import { Button } from "@/components/ui/button";
 import { REPO } from "@/content/snippets";
@@ -49,13 +49,13 @@ function Architecture() {
         <figure className="overflow-hidden rounded-lg border border-border bg-card shadow-sm">
           <div className="overflow-x-auto">
             <img
-              src={architectureAsset.url}
+              src={architectureAsset}
               alt="Nonna dependency injection framework architecture diagram showing the build-time compiler, runtime injector, framework integrations, and samples."
               className="hidden h-auto min-w-[760px] max-w-none dark:block md:min-w-0 md:w-full"
               loading="eager"
             />
             <img
-              src={architectureLightAsset.url}
+              src={architectureLightAsset}
               alt="Nonna dependency injection framework architecture diagram showing the build-time compiler, runtime injector, framework integrations, and samples."
               className="block h-auto min-w-[760px] max-w-none dark:hidden md:min-w-0 md:w-full"
               loading="eager"
