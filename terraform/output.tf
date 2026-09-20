@@ -1,9 +1,7 @@
 output "cloudfront_distribution_id" {
-  description = "The ID of the CloudFront distribution."
-  value       = aws_cloudfront_distribution.nonna-website.id
+  value = aws_cloudfront_distribution.cdn.id
 }
 
 output "s3_bucket_name" {
-  description = "The name of the S3 bucket."
-  value       = "nonna-website"
+  value = local.bucket_name
 }
