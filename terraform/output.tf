@@ -5,5 +5,5 @@ output "cloudfront_distribution_id" {
 
 output "s3_bucket_name" {
   description = "The name of the S3 bucket."
-  value       = local.bucket_nonna_website
+  value       = nonna-website
 }
