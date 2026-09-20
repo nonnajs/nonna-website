@@ -93,7 +93,9 @@ async function buildInjector(config: Config): Promise<Injector> {
     });
   }
 
+  console.log("[pg] registered, initializing");
   await injector.initialize();
+  console.log("[pg] initialized");
   return injector;
 }
 
