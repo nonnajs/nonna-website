@@ -367,7 +367,15 @@ function Playground() {
   const [sources, setSources] = useState<Record<string, string>>(initialSources);
   const [applied, setApplied] = useState<Record<string, string>>(initialSources);
   const [compileError, setCompileError] = useState<string | null>(null);
-  const [injector, setInjector] = useState<Injector | null>(null);
+  /**
+   * The injector and the classes it was built from must always travel together: resolving a
+   * freshly compiled class against an older container would throw ProviderNotFoundError.
+   */
+  const [built, setBuilt] = useState<{
+    injector: Injector;
+    services: CompiledServices;
+    generation: number;
+  } | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [nonce, setNonce] = useState(0);
 
@@ -375,14 +383,6 @@ function Playground() {
     () => SERVICE_SOURCES.some((s) => sources[s.name] !== applied[s.name]),
     [sources, applied],
   );
-
-  const services = useMemo(() => {
-    try {
-      return compileServices(applied);
-    } catch {
-      return null;
-    }
-  }, [applied]);
 
   const run = useCallback(() => {
     try {
@@ -396,25 +396,34 @@ function Playground() {
   }, [sources]);
 
   useEffect(() => {
-    if (!services) return;
     let active = true;
-    let built: Injector | undefined;
-    setInjector(null);
+    let created: Injector | undefined;
+    setBuilt(null);
     setError(null);
+
+    let services: CompiledServices;
+    try {
+      services = compileServices(applied);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : String(e));
+      return;
+    }
+
     buildInjector(config, services)
-      .then((i) => {
-        built = i;
-        if (active) setInjector(i);
-        else void i.destroy();
+      .then((injector) => {
+        created = injector;
+        if (active) setBuilt({ injector, services, generation: nonce });
+        else void injector.destroy();
       })
       .catch((e: unknown) => {
         if (active) setError(e instanceof Error ? e.message : String(e));
       });
+
     return () => {
       active = false;
-      void built?.destroy();
+      void created?.destroy();
     };
-  }, [config, services, nonce]);
+  }, [config, applied, nonce]);
 
   const set = useCallback(
     (key: keyof Config) => (v: boolean) => setConfig((c) => ({ ...c, [key]: v })),
