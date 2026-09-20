@@ -14,6 +14,7 @@ import { Route as ArchitectureRouteImport } from './routes/architecture'
 import { Route as CompareRouteImport } from './routes/compare'
 import { Route as DocsRouteImport } from './routes/docs'
 import { Route as EcosystemRouteImport } from './routes/ecosystem'
+import { Route as PlaygroundRouteImport } from './routes/playground'
 import { Route as SamplesRouteImport } from './routes/samples'
 
 const IndexRoute = IndexRouteImport.update({
@@ -41,6 +42,11 @@ const EcosystemRoute = EcosystemRouteImport.update({
   path: '/ecosystem',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlaygroundRoute = PlaygroundRouteImport.update({
+  id: '/playground',
+  path: '/playground',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SamplesRoute = SamplesRouteImport.update({
   id: '/samples',
   path: '/samples',
@@ -53,6 +59,7 @@ export interface FileRoutesByFullPath {
   '/compare': typeof CompareRoute
   '/docs': typeof DocsRoute
   '/ecosystem': typeof EcosystemRoute
+  '/playground': typeof PlaygroundRoute
   '/samples': typeof SamplesRoute
 }
 export interface FileRoutesByTo {
@@ -61,6 +68,7 @@ export interface FileRoutesByTo {
   '/compare': typeof CompareRoute
   '/docs': typeof DocsRoute
   '/ecosystem': typeof EcosystemRoute
+  '/playground': typeof PlaygroundRoute
   '/samples': typeof SamplesRoute
 }
 export interface FileRoutesById {
@@ -70,14 +78,28 @@ export interface FileRoutesById {
   '/compare': typeof CompareRoute
   '/docs': typeof DocsRoute
   '/ecosystem': typeof EcosystemRoute
+  '/playground': typeof PlaygroundRoute
   '/samples': typeof SamplesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/architecture' | '/compare' | '/docs' | '/ecosystem' | '/samples'
+    | '/'
+    | '/architecture'
+    | '/compare'
+    | '/docs'
+    | '/ecosystem'
+    | '/playground'
+    | '/samples'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/architecture' | '/compare' | '/docs' | '/ecosystem' | '/samples'
+  to:
+    | '/'
+    | '/architecture'
+    | '/compare'
+    | '/docs'
+    | '/ecosystem'
+    | '/playground'
+    | '/samples'
   id:
     | '__root__'
     | '/'
@@ -85,6 +107,7 @@ export interface FileRouteTypes {
     | '/compare'
     | '/docs'
     | '/ecosystem'
+    | '/playground'
     | '/samples'
   fileRoutesById: FileRoutesById
 }
@@ -94,6 +117,7 @@ export interface RootRouteChildren {
   CompareRoute: typeof CompareRoute
   DocsRoute: typeof DocsRoute
   EcosystemRoute: typeof EcosystemRoute
+  PlaygroundRoute: typeof PlaygroundRoute
   SamplesRoute: typeof SamplesRoute
 }
 
@@ -134,6 +158,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EcosystemRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/playground': {
+      id: '/playground'
+      path: '/playground'
+      fullPath: '/playground'
+      preLoaderRoute: typeof PlaygroundRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/samples': {
       id: '/samples'
       path: '/samples'
@@ -150,6 +181,7 @@ const rootRouteChildren: RootRouteChildren = {
   CompareRoute: CompareRoute,
   DocsRoute: DocsRoute,
   EcosystemRoute: EcosystemRoute,
+  PlaygroundRoute: PlaygroundRoute,
   SamplesRoute: SamplesRoute,
 }
 export const routeTree = rootRouteImport
