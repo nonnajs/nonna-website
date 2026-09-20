@@ -22,6 +22,7 @@ export function Footer() {
           <ul className="mt-3 space-y-2 text-sm">
             <li><Link to="/" className="hover:text-amber">Home</Link></li>
             <li><Link to="/docs" className="hover:text-amber">Docs</Link></li>
+            <li><Link to="/playground" className="hover:text-amber">Playground</Link></li>
             <li><Link to="/architecture" className="hover:text-amber">Architecture</Link></li>
             <li><Link to="/ecosystem" className="hover:text-amber">Ecosystem</Link></li>
             <li><Link to="/compare" className="hover:text-amber">Compare</Link></li>

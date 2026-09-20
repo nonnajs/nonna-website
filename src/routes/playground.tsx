@@ -14,7 +14,6 @@ import {
   FEATURE_FLAGS,
   FormalGreeter,
   FriendlyGreeter,
-  FriendlyGreeter as _Friendly,
   GREETER,
   LoggerService,
   UserRepository,
@@ -45,8 +44,6 @@ export const Route = createFileRoute("/playground")({
   }),
   component: Playground,
 });
-
-void _Friendly;
 
 interface Config {
   friendly: boolean;
