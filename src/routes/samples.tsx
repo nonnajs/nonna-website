@@ -32,7 +32,7 @@ function Samples() {
         <SectionHeading
           eyebrow="samples"
           title="Proof, not promises."
-          body="11 runnable sample applications each live in their own repo and prove full compatibility across every runtime and framework Nonna supports."
+          body="12 runnable sample applications each live in their own repo and prove full compatibility across every runtime and framework Nonna supports."
         />
       </Reveal>
       <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

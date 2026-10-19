@@ -344,6 +344,12 @@ export const samples = [
     highlights: "Zero-framework HTTP server, request scoping per request, router",
   },
   {
+    name: "sample-nodeboot-http",
+    runtime: "Node.js + Node-Boot (`node:http`)",
+    icon: "node",
+    highlights: "Nonna as Node-Boot's IoC container, AOT component scan, OpenAPI, actuator",
+  },
+  {
     name: "sample-deno",
     runtime: "Deno (1.40+, 2.x)",
     icon: "deno",
